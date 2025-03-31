@@ -2,18 +2,21 @@ import { MonitorIcon, MoonIcon, SunIcon } from 'lucide-preact'
 import { motion } from 'motion/react'
 import { useEffect, useState } from 'preact/hooks'
 import { TextLoop } from './ui/text-loop'
-import { ThemeProvider, useTheme } from './theme'
+import { useTheme, THEMES } from '@preachjs/themes'
 
 const THEMES_OPTIONS = [
-  { label: 'Light', id: 'light', icon: <SunIcon className="w-4 h-4" /> },
-  { label: 'Dark', id: 'dark', icon: <MoonIcon className="w-4 h-4" /> },
-  { label: 'System', id: 'system', icon: <MonitorIcon className="w-4 h-4" /> },
+  { label: 'Light', id: THEMES.LIGHT, icon: <SunIcon className="w-4 h-4" /> },
+  { label: 'Dark', id: THEMES.DARK, icon: <MoonIcon className="w-4 h-4" /> },
+  {
+    label: 'System',
+    id: THEMES.SYSTEM,
+    icon: <MonitorIcon className="w-4 h-4" />,
+  },
 ]
 
 function ThemeSwitch() {
   const [mounted, setMounted] = useState(false)
   const { theme, setTheme } = useTheme()
-  console.log({ theme })
 
   useEffect(() => {
     setMounted(true)
@@ -27,7 +30,7 @@ function ThemeSwitch() {
     return (
       <button
         key={themeItem.id}
-        className="relative inline-flex h-7 w-7 items-center justify-center text-zinc-500 transition-colors duration-100 focus-visible:outline-2 data-[checked=true]:text-zinc-950 dark:text-zinc-400 dark:data-[checked=true]:text-zinc-50"
+        className="relative inline-flex h-7 w-7 items-center hover:cursor-pointer justify-center text-zinc-500 transition-colors duration-100 focus-visible:outline-2 data-[checked=true]:text-zinc-950 dark:text-zinc-400 dark:data-[checked=true]:text-zinc-50"
         type="button"
         aria-label={`Switch to ${themeItem.label} theme`}
         data-id={themeItem.id}
@@ -40,7 +43,6 @@ function ThemeSwitch() {
             layoutId="background"
             className="absolute top-0 left-0 w-full h-full rounded-lg pointer-events-none -z-1 bg-zinc-100 dark:bg-zinc-800"
             transition={{ type: 'spring', bounce: 0, duration: 0.2 }}
-            enableHover={false}
           />
         )}
         {themeItem.icon}
