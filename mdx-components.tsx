@@ -1,3 +1,4 @@
+export { MDXProvider } from '@mdx-js/preact'
 import type { MDXComponents } from 'mdx/types'
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {

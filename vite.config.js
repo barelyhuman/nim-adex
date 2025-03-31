@@ -4,9 +4,13 @@ import { adex } from 'adex'
 import { providers } from 'adex/fonts'
 import { resolve } from 'path'
 import { defineConfig } from 'vite'
+import mdx from '@mdx-js/rollup'
 
 export default defineConfig({
   resolve: { alias: { '@': resolve(__dirname, './src') } },
+  build: {
+    minify: false,
+  },
   plugins: [
     tailwindcss(),
     adex({
@@ -23,5 +27,13 @@ export default defineConfig({
       },
     }),
     preact(),
+    {
+      enforce: 'pre',
+      ...mdx({
+        jsxRuntime: 'automatic',
+        jsxImportSource: 'preact',
+        providerImportSource: '/mdx-components.tsx',
+      }),
+    },
   ],
 })

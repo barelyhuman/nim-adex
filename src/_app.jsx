@@ -41,7 +41,13 @@ const removeBaseURL = (url) => {
 }
 
 // @ts-expect-error injected by vite
-import { routes } from '~routes'
+import { routes as _routes } from '~routes'
+
+// TODO: fix in adex
+const routes = _routes.map((d) => {
+  d.routePath = d.routePath.replace(/\/\*(\w+)/, '/:$1*')
+  return d
+})
 
 function ComponentWrapper({ url = '' }) {
   return h(

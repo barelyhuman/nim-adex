@@ -1,0 +1,92 @@
+diff --git a/src/vite.js b/src/vite.js
+index 5694df8fce980a92448c075e75a0e522cacb6c17..514f51ef2a9cccac53f8314d6795b149f6d74339 100644
+--- a/src/vite.js
++++ b/src/vite.js
+@@ -29,15 +29,15 @@ const adapterMap = {
+ 
+ /**
+  * @param {import("./vite.js").AdexOptions} [options]
+- * @returns
++ * @returns {(import("vite").Plugin)[]}
+  */
+ export function adex({
+   fonts,
+   islands = false,
+   ssr = true,
+   adapter: adapter = 'node',
+-  __clientConfig = {},
+ } = {}) {
++  // @ts-expect-error probably because of the `.filter`
+   return [
+     preactPages({
+       root: '/src/pages',
+@@ -135,7 +135,7 @@ export function adex({
+ 
+     // SSR/Render Server Specific plugins
+     ssr && adexServerBuilder({ fonts, adapter, islands }),
+-  ]
++  ].filter(Boolean)
+ }
+ 
+ /**
+@@ -210,7 +210,7 @@ function adexClientBuilder({ ssr = true, islands = false } = {}) {
+  */
+ function adexBuildPrep({ islands = false }) {
+   return {
+-    name: 'remover',
++    name: 'adex-build-prep',
+     apply: 'build',
+     async configResolved(config) {
+       if (!islands) return
+@@ -497,7 +497,7 @@ function adexDevServer({ islands = false } = {}) {
+   const devCSSMap = new Map()
+   let cfg
+   return {
+-    name: adexDevServer.name,
++    name: 'adex-dev-server',
+     apply: 'serve',
+     enforce: 'pre',
+     configResolved(_cfg) {
+@@ -536,11 +536,9 @@ function adexDevServer({ islands = false } = {}) {
+             let renderedHTML = html.replace(
+               '</head>',
+               `
+-              <script type="module">
+-                import "virtual:adex:global.css"
+-              </script>
++              <link rel="preload" href="/virtual:adex:global.css" as="style" onload="this.rel='stylesheet'" />
+               ${cssLinks.map(d => {
+-                return `<link rel="stylesheet" href="${d}">`
++                return `<link rel="preload" href="/${d}" as="style" onload="this.rel='stylesheet'"/>`
+               })}
+               </head>
+             `
+@@ -598,6 +596,11 @@ function adexServerBuilder({ fonts, adapter, islands }) {
+ 
+       console.log(`\nBuilding Server: ${serverOutDir}\n`)
+ 
++      console.log({ plugs: cfg.plugins })
++      const sanitizedPlugins = (cfg.plugins ?? [])
++        .filter(d => !d.name.startsWith('vite:'))
++        .filter(d => !d.name.startsWith('adex-'))
++
+       await build({
+         configFile: false,
+         ssr: {
+@@ -698,6 +701,7 @@ function adexServerBuilder({ fonts, adapter, islands }) {
+           ),
+           addFontsPlugin(fonts),
+           islands && adexIslandsBuilder(),
++          ...sanitizedPlugins,
+         ],
+         build: {
+           outDir: serverOutDir,
+@@ -778,7 +782,7 @@ function preactPages({
+   replacer = '',
+ } = {}) {
+   return {
+-    name: 'routes',
++    name: 'adex-routes',
+     enforce: 'pre',
+     resolveId(id) {
+       if (id !== virtualId) {

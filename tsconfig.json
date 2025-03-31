@@ -14,6 +14,7 @@
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
     "incremental": true,
+    "types": ["vite/client"],
     "paths": {
       "@/*": ["./src/*"]
     }
