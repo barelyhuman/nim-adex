@@ -8,11 +8,12 @@ import {
   useSpring,
   type SpringOptions,
 } from 'motion/react'
+import { ComponentChildren } from "preact"
 
 const SPRING_CONFIG = { stiffness: 26.7, damping: 4.1, mass: 0.2 }
 
 export type MagneticProps = {
-  children: React.ReactNode
+  children: ComponentChildren
   intensity?: number
   range?: number
   actionArea?: 'self' | 'parent' | 'global'

@@ -7,11 +7,12 @@ import {
   Variants,
   AnimatePresenceProps,
 } from 'motion/react'
+import { ComponentChildren } from 'preact'
 import { Children } from 'preact/compat'
 import { useState, useEffect } from 'preact/hooks'
 
 export type TextLoopProps = {
-  children: React.ReactNode[]
+  children: ComponentChildren
   className?: string
   interval?: number
   transition?: Transition

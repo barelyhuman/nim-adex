@@ -1,8 +1,8 @@
-// import { TextMorph } from '@/components/ui/text-morph'
-// import { ScrollProgress } from '@/components/ui/scroll-progress'
+import { TextMorph } from '@/components/ui/text-morph'
 import { ComponentChildren } from 'preact'
 import { useEffect, useState } from 'preact/hooks'
 import { BaseLayout } from '../base'
+import { ScrollProgress } from '@/components/ui/scroll-progress'
 
 function CopyButton() {
   const [text, setText] = useState('Copy')
@@ -23,9 +23,7 @@ function CopyButton() {
       className="flex items-center gap-1 text-sm text-center transition-colors font-base text-zinc-500 dark:text-zinc-400"
       type="button"
     >
-      {/* <TextMorph> */}
-      {text}
-      {/* </TextMorph> */}
+      <TextMorph>{text}</TextMorph>
       <span>URL</span>
     </button>
   )
@@ -40,12 +38,12 @@ export default function LayoutBlogPost({
     <BaseLayout>
       <>
         <div className="pointer-events-none fixed left-0 top-0 z-10 h-12 w-full bg-gray-100 to-transparent backdrop-blur-xl [-webkit-mask-image:linear-gradient(to_bottom,black,transparent)] dark:bg-zinc-950" />
-        {/* <ScrollProgress
-          className="fixed top-0 z-20 h-0.5 bg-gray-300 dark:bg-zinc-600"
+        <ScrollProgress
+          className="fixed top-0 z-20 h-0.5 bg-gray-300 dark:bg-gray-600"
           springOptions={{
             bounce: 0,
           }}
-        /> */}
+        />
 
         <div className="absolute right-4 top-24">
           <CopyButton />

@@ -17,6 +17,8 @@
     "adex": "0.0.18",
     "adex-adapter-node": "^0.0.18",
     "clsx": "^2.1.1",
+    "react": "npm:@preact/compat",
+    "react-dom": "npm:@preact/compat",
     "lucide-preact": "^0.484.0",
     "motion": "^11.15.0",
     "preact": "^10.26.4",
